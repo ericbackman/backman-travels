@@ -6,13 +6,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   initThemeToggle();
   initTabs();
-  initSidebar(travelers, trips);
-  renderMap(trips);
+  addTripsControl(map, travelers, trips);
   updateStats(trips);
   renderTripsPage(trips);
   renderStatsPage(travelers, trips);
-
-  setTimeout(() => document.getElementById('loading').classList.add('hidden'), 500);
 
   function initThemeToggle() {
     const btn = document.getElementById('theme-toggle');
@@ -50,108 +47,126 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  function initSidebar(travelers, trips) {
-    const filtersEl = document.getElementById('traveler-filters');
-    const listEl = document.getElementById('trip-list');
-    const sidebar = document.getElementById('sidebar');
-    const toggleBtn = document.getElementById('sidebar-toggle');
-    const closeBtn = document.getElementById('sidebar-close');
+  function addTripsControl(leafletMap, travelers, trips) {
+    let activeFilters = new Set(travelers.map(t => t.id));
+    const tripState = new Map();
+    trips.forEach(t => tripState.set(t.key, true));
 
-    let activeFilters = new Set();
+    const Control = L.Control.extend({
+      options: { position: 'topleft' },
+      onAdd: function () {
+        const container = L.DomUtil.create('div', 'leaflet-bar trips-panel expanded');
+        L.DomEvent.disableClickPropagation(container);
+        L.DomEvent.disableScrollPropagation(container);
 
-    travelers.forEach(t => {
-      const chip = document.createElement('button');
-      chip.className = 'traveler-chip active';
-      chip.textContent = t.name;
-      chip.dataset.id = t.id;
-      activeFilters.add(t.id);
+        const header = L.DomUtil.create('div', 'trips-panel-header', container);
+        const label = document.createElement('span');
+        label.className = 'trips-panel-header-label';
+        label.textContent = '🗺️ Trips';
+        const chevron = document.createElement('span');
+        chevron.className = 'trips-panel-chevron';
+        chevron.textContent = '▾';
+        header.append(label, chevron);
 
-      chip.addEventListener('click', () => {
-        chip.classList.toggle('active');
-        if (activeFilters.has(t.id)) {
-          activeFilters.delete(t.id);
-        } else {
-          activeFilters.add(t.id);
-        }
-        filterTrips();
-      });
+        const body = L.DomUtil.create('div', 'trips-panel-body', container);
 
-      filtersEl.appendChild(chip);
-    });
+        const filters = L.DomUtil.create('div', 'panel-filters', body);
+        travelers.forEach(t => {
+          const chip = document.createElement('button');
+          chip.className = 'traveler-chip active';
+          chip.textContent = t.name;
+          chip.addEventListener('click', () => {
+            chip.classList.toggle('active');
+            if (activeFilters.has(t.id)) {
+              activeFilters.delete(t.id);
+            } else {
+              activeFilters.add(t.id);
+            }
+            applyFilters();
+          });
+          filters.appendChild(chip);
+        });
 
-    function filterTrips() {
-      TravelMap.clearAll();
-      listEl.replaceChildren();
+        const list = L.DomUtil.create('div', 'trips-panel-list', body);
 
-      const visible = trips.filter(trip => {
-        if (activeFilters.size === 0) return false;
-        return trip.travelers.some(tid => activeFilters.has(tid));
-      });
+        trips.forEach(trip => {
+          const btn = L.DomUtil.create('a', 'trip-toggle-btn active', list);
+          btn.href = '#';
 
-      visible.forEach(trip => {
-        TravelMap.renderTrip(trip);
-        listEl.appendChild(buildTripCard(trip, travelers));
-      });
+          const icon = document.createElement('span');
+          icon.className = 'trip-toggle-icon';
+          icon.textContent = trip.icon;
 
-      if (visible.length) TravelMap.fitAll();
-      updateStats(visible);
-    }
+          const name = document.createElement('span');
+          name.className = 'trip-toggle-name';
+          name.textContent = trip.name;
 
-    filterTrips();
+          const year = document.createElement('span');
+          year.className = 'trip-toggle-year';
+          year.textContent = trip.year;
 
-    toggleBtn.addEventListener('click', () => sidebar.classList.remove('collapsed'));
-    closeBtn.addEventListener('click', () => sidebar.classList.add('collapsed'));
-  }
+          btn.append(icon, name, year);
+          btn.dataset.key = trip.key;
 
-  function buildTripCard(trip, travelers) {
-    const card = document.createElement('div');
-    card.className = 'trip-card';
+          L.DomEvent.on(btn, 'click', (e) => {
+            L.DomEvent.preventDefault(e);
+            const on = tripState.get(trip.key);
+            tripState.set(trip.key, !on);
+            btn.classList.toggle('active', !on);
+            if (!on) {
+              TravelMap.showTrip(trip.key);
+            } else {
+              TravelMap.hideTrip(trip.key);
+            }
+            updateStatsFromVisible();
+          });
+        });
 
-    const header = document.createElement('div');
-    header.className = 'trip-card-header';
+        L.DomEvent.on(header, 'click', () => {
+          container.classList.toggle('expanded');
+        });
 
-    const icon = document.createElement('span');
-    icon.className = 'trip-card-icon';
-    icon.textContent = trip.icon;
-
-    const name = document.createElement('span');
-    name.className = 'trip-card-name';
-    name.textContent = trip.name;
-
-    const year = document.createElement('span');
-    year.className = 'trip-card-year';
-    year.textContent = trip.year;
-
-    header.append(icon, name, year);
-
-    const meta = document.createElement('div');
-    meta.className = 'trip-card-meta';
-    meta.textContent = `${getStopCount(trip)} stops`;
-
-    const tagsEl = document.createElement('div');
-    tagsEl.className = 'trip-card-travelers';
-    trip.travelers.forEach(tid => {
-      const t = travelers.find(x => x.id === tid);
-      if (t) {
-        const tag = document.createElement('span');
-        tag.className = 'traveler-tag';
-        tag.textContent = t.name;
-        tagsEl.appendChild(tag);
+        return container;
       }
     });
 
-    card.append(header, meta, tagsEl);
-    card.addEventListener('click', () => TravelMap.flyToTrip(trip));
-    return card;
-  }
+    new Control().addTo(leafletMap);
 
-  function renderMap(trips) {
-    // Initial render handled by sidebar filter
+    function applyFilters() {
+      TravelMap.clearAll();
+      const btns = document.querySelectorAll('.trip-toggle-btn');
+
+      trips.forEach((trip, i) => {
+        const matchesFilter = activeFilters.size > 0 &&
+          trip.travelers.some(tid => activeFilters.has(tid));
+
+        if (matchesFilter) {
+          tripState.set(trip.key, true);
+          TravelMap.renderTrip(trip);
+          btns[i].classList.add('active');
+          btns[i].style.display = '';
+        } else {
+          tripState.set(trip.key, false);
+          btns[i].classList.remove('active');
+          btns[i].style.display = 'none';
+        }
+      });
+
+      TravelMap.fitAll();
+      updateStatsFromVisible();
+    }
+
+    function updateStatsFromVisible() {
+      const visible = trips.filter(t => tripState.get(t.key));
+      updateStats(visible);
+    }
+
+    TravelMap.renderTrips(trips);
   }
 
   function getStopCount(trip) {
     if (trip.mode === 'pins') return trip.cities.length;
-    if (trip.mode === 'hub-spoke') return trip.spokes.length + (trip.spokes.filter(s => s.chain).reduce((a, s) => a + s.chain.length, 0));
+    if (trip.mode === 'hub-spoke') return trip.spokes.length + trip.spokes.filter(s => s.chain).reduce((a, s) => a + s.chain.length, 0);
     return trip.stops ? trip.stops.length : 0;
   }
 
@@ -252,14 +267,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     const grid = document.createElement('div');
     grid.className = 'stat-grid';
 
-    const statData = [
+    [
       { value: trips.length, label: 'Total Trips' },
       { value: allCountries.size, label: 'Countries Visited' },
       { value: allCities.size, label: 'Cities Visited' },
       { value: travelers.length, label: 'Travelers' }
-    ];
-
-    statData.forEach(({ value, label }) => {
+    ].forEach(({ value, label }) => {
       const card = document.createElement('div');
       card.className = 'stat-card';
       const v = document.createElement('div');
