@@ -4,9 +4,100 @@
     { "id": "carl", "name": "Carl", "color": "#81c784" },
     { "id": "mika", "name": "Mika", "color": "#ce93d8" },
     { "id": "marianne", "name": "Marianne", "color": "#ffb74d" },
-    { "id": "todd", "name": "Todd", "color": "#ef5350" }
+    { "id": "todd", "name": "Todd", "color": "#ef5350" },
+    { "id": "family", "name": "Full Family", "color": "#ffd700" }
   ],
   "trips": [
+    {
+      "key": "family-trips",
+      "name": "Family Trips",
+      "year": "2002-2026",
+      "icon": "👨‍👩‍👧‍👦",
+      "color": "#ffd700",
+      "mode": "pins",
+      "travelers": ["family", "eric", "carl", "mika", "marianne", "todd"],
+      "countries": ["Canada", "United States", "Mexico", "Honduras", "Cayman Islands", "Switzerland", "Croatia", "Bonaire", "Indonesia", "Vietnam", "France", "United Kingdom", "Netherlands", "Germany", "Belgium"],
+      "cities": [
+        { "name": "Whistler, BC",        "lat": 50.1163,  "lng": -122.9574, "note": "Annual ski trip — 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011" },
+        { "name": "Zermatt",             "lat": 46.0207,  "lng": 7.7491,    "note": "Ski trips — Jan 2015, Jan 2017, Jan 2019" },
+        { "name": "Grand Cayman",        "lat": 19.3222,  "lng": -81.2409,  "note": "Apr 2014, Apr 2026" },
+        { "name": "Roatan, Honduras",    "lat": 16.3220,  "lng": -86.5305,  "note": "2025" },
+        { "name": "Puerto Vallarta",     "lat": 20.6534,  "lng": -105.2253, "note": "Dec 2024" },
+        { "name": "Palm Springs",        "lat": 33.8303,  "lng": -116.5453, "note": "Dec 2023" },
+        { "name": "Palm Desert",         "lat": 33.7225,  "lng": -116.3764, "note": "Dec 2022" },
+        { "name": "Breckenridge, CO",    "lat": 39.4817,  "lng": -106.0484, "note": "Feb 2020" },
+        { "name": "Cozumel, Mexico",     "lat": 20.4318,  "lng": -86.9203,  "note": "Dec 2019" },
+        { "name": "Bonaire",             "lat": 12.2019,  "lng": -68.2624,  "note": "Dec 2017" },
+        { "name": "Key West, FL",        "lat": 24.5551,  "lng": -81.7800,  "note": "Dec 2015" },
+        { "name": "Key Largo, FL",       "lat": 25.0865,  "lng": -80.4473,  "note": "Dec 2013" },
+        { "name": "New River Gorge, WV", "lat": 38.0706,  "lng": -80.7280,  "note": "Rafting — Aug 2013" },
+        { "name": "San Francisco",       "lat": 37.7749,  "lng": -122.4194, "note": "Nov 2013" },
+        { "name": "Vail, CO",            "lat": 39.6433,  "lng": -106.3781, "note": "Mar 2012" }
+      ]
+    },
+    {
+      "key": "family-2022-asia",
+      "name": "2022 Indonesia + Vietnam",
+      "year": "2022",
+      "icon": "🌴",
+      "color": "#ffd700",
+      "pathColor": "rgba(255, 215, 0, 0.4)",
+      "mode": "linear",
+      "travelers": ["family", "eric", "carl", "mika", "marianne", "todd"],
+      "countries": ["Indonesia", "Vietnam"],
+      "stops": [
+        { "num": 1, "name": "Bali",              "lat": -8.3405,  "lng": 115.0920, "type": "hub" },
+        { "num": 2, "name": "Ho Chi Minh City",  "lat": 10.8231,  "lng": 106.6297, "type": "hub" },
+        { "num": 3, "name": "Hanoi",             "lat": 21.0285,  "lng": 105.8542, "type": "hub" }
+      ]
+    },
+    {
+      "key": "family-2019-croatia",
+      "name": "2019 Croatia",
+      "year": "2019",
+      "icon": "🏖️",
+      "color": "#ffd700",
+      "pathColor": "rgba(255, 215, 0, 0.4)",
+      "mode": "linear",
+      "travelers": ["family", "eric", "carl", "mika", "marianne", "todd"],
+      "countries": ["Croatia"],
+      "stops": [
+        { "num": 1, "name": "Split",       "lat": 43.5081, "lng": 16.4402, "type": "hub" },
+        { "num": 2, "name": "Dubrovnik",   "lat": 42.6507, "lng": 18.0944, "type": "hub" }
+      ]
+    },
+    {
+      "key": "family-2012-europe",
+      "name": "2012 Europe",
+      "year": "2012",
+      "icon": "🏰",
+      "color": "#ffd700",
+      "pathColor": "rgba(255, 215, 0, 0.4)",
+      "mode": "linear",
+      "travelers": ["family", "eric", "carl", "mika", "marianne", "todd"],
+      "countries": ["Netherlands", "Germany", "France", "Belgium"],
+      "stops": [
+        { "num": 1, "name": "Amsterdam",  "lat": 52.3676, "lng": 4.9041,  "type": "hub" },
+        { "num": 2, "name": "Munich",     "lat": 48.1351, "lng": 11.5820, "type": "hub" },
+        { "num": 3, "name": "Paris",      "lat": 48.8566, "lng": 2.3522,  "type": "hub" },
+        { "num": 4, "name": "Brussels",   "lat": 50.8503, "lng": 4.3517,  "type": "hub" }
+      ]
+    },
+    {
+      "key": "family-2011-paris-england",
+      "name": "2011 Paris & England",
+      "year": "2011",
+      "icon": "🗼",
+      "color": "#ffd700",
+      "pathColor": "rgba(255, 215, 0, 0.4)",
+      "mode": "linear",
+      "travelers": ["family", "eric", "carl", "mika", "marianne", "todd"],
+      "countries": ["France", "United Kingdom"],
+      "stops": [
+        { "num": 1, "name": "Paris",   "lat": 48.8566, "lng": 2.3522,  "type": "hub" },
+        { "num": 2, "name": "London",  "lat": 51.5074, "lng": -0.1278, "type": "hub" }
+      ]
+    },
     {
       "key": "2023-backpacking",
       "name": "2023 Backpacking",

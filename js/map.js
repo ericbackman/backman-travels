@@ -51,19 +51,22 @@ const TravelMap = (() => {
   }
 
   function renderTrip(trip) {
-    const layers = [];
-
     if (trip.mode === 'linear') {
-      layers.push(...renderLinear(trip));
+      const layers = renderLinear(trip);
+      const group = L.layerGroup(layers).addTo(map);
+      tripLayers[trip.key] = group;
+      allLayers.push(group);
     } else if (trip.mode === 'hub-spoke') {
-      layers.push(...renderHubSpoke(trip));
+      const layers = renderHubSpoke(trip);
+      const group = L.layerGroup(layers).addTo(map);
+      tripLayers[trip.key] = group;
+      allLayers.push(group);
     } else if (trip.mode === 'pins') {
-      layers.push(...renderPins(trip));
+      const group = renderPinsClustered(trip);
+      group.addTo(map);
+      tripLayers[trip.key] = group;
+      allLayers.push(group);
     }
-
-    const group = L.layerGroup(layers).addTo(map);
-    tripLayers[trip.key] = group;
-    allLayers.push(group);
   }
 
   function renderLinear(trip) {
@@ -141,18 +144,41 @@ const TravelMap = (() => {
     return layers;
   }
 
-  function renderPins(trip) {
-    const layers = [];
-
-    trip.cities.forEach(city => {
-      const m = createCityMarker(city, trip.color);
-      const tooltip = city.note ? `${city.name} — ${city.note}` : city.name;
-      m.bindTooltip(tooltip, { direction: 'top', offset: [0, -8] });
-      m.bindPopup(`<div class="popup-title">${city.name}</div>${city.note ? `<div class="popup-meta">${city.note}</div>` : ''}`);
-      layers.push(m);
+  function renderPinsClustered(trip) {
+    const cluster = L.markerClusterGroup({
+      maxClusterRadius: 40,
+      iconCreateFunction: (c) => {
+        const count = c.getChildCount();
+        return L.divIcon({
+          className: '',
+          html: `<div class="cluster-marker" style="background:${trip.color}">${count}</div>`,
+          iconSize: [36, 36],
+          iconAnchor: [18, 18]
+        });
+      },
+      spiderfyOnMaxZoom: true,
+      showCoverageOnHover: false
     });
 
-    return layers;
+    trip.cities.forEach(city => {
+      const m = createFamilyPinMarker(city, trip.color);
+      const tooltip = city.note ? `${city.name} — ${city.note}` : city.name;
+      m.bindTooltip(tooltip, { direction: 'top', offset: [0, -14] });
+      m.bindPopup(buildCityPopup(city, trip));
+      cluster.addLayer(m);
+    });
+
+    return cluster;
+  }
+
+  function createFamilyPinMarker(city, color) {
+    const icon = L.divIcon({
+      className: '',
+      html: `<div class="family-pin" style="background:${color}"></div>`,
+      iconSize: [16, 16],
+      iconAnchor: [8, 8]
+    });
+    return L.marker([city.lat, city.lng], { icon });
   }
 
   function createStopMarker(stop, color) {
@@ -195,6 +221,14 @@ const TravelMap = (() => {
     `;
   }
 
+  function buildCityPopup(city, trip) {
+    return `
+      <div class="popup-title">${city.name}</div>
+      ${city.note ? `<div class="popup-meta">${city.note}</div>` : ''}
+      <div class="popup-meta">${trip.icon} ${trip.name}</div>
+    `;
+  }
+
   function showTrip(key) {
     if (tripLayers[key]) {
       tripLayers[key].addTo(map);
@@ -222,9 +256,16 @@ const TravelMap = (() => {
   function fitAll() {
     const allCoords = [];
     Object.values(tripLayers).forEach(group => {
-      group.eachLayer(layer => {
-        if (layer.getLatLng) allCoords.push(layer.getLatLng());
-      });
+      if (group.getLayers) {
+        group.getLayers().forEach(layer => {
+          if (layer.getLatLng) allCoords.push(layer.getLatLng());
+        });
+      }
+      if (group.eachLayer) {
+        group.eachLayer(layer => {
+          if (layer.getLatLng) allCoords.push(layer.getLatLng());
+        });
+      }
     });
     if (allCoords.length) {
       map.fitBounds(L.latLngBounds(allCoords), { padding: [40, 40] });
