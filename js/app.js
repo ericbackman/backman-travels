@@ -4,10 +4,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   const data = await fetch('data/travels.json').then(r => r.json());
   const { travelers, trips } = data;
 
+  const familyTrips = trips.filter(t => t.travelers.includes('family'));
+  const ericTrips = trips.filter(t => t.travelers.includes('eric') && !t.travelers.includes('family'));
+
   initThemeToggle();
   initTabs();
-  addTripsControl(map, travelers, trips);
-  updateStats(trips);
+  addTripsControl(map, familyTrips, ericTrips);
+  updateStats(familyTrips);
   renderTripsPage(trips);
   renderStatsPage(travelers, trips);
 
@@ -47,10 +50,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  function addTripsControl(leafletMap, travelers, trips) {
-    let activeFilters = new Set(travelers.map(t => t.id));
+  function addTripsControl(leafletMap, familyTrips, ericTrips) {
     const tripState = new Map();
-    trips.forEach(t => tripState.set(t.key, true));
+    familyTrips.forEach(t => tripState.set(t.key, true));
+    ericTrips.forEach(t => tripState.set(t.key, false));
 
     const Control = L.Control.extend({
       options: { position: 'topleft' },
@@ -70,27 +73,57 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const body = L.DomUtil.create('div', 'trips-panel-body', container);
 
-        const filters = L.DomUtil.create('div', 'panel-filters', body);
-        travelers.forEach(t => {
-          const chip = document.createElement('button');
-          chip.className = 'traveler-chip active';
-          chip.textContent = t.name;
-          chip.addEventListener('click', () => {
-            chip.classList.toggle('active');
-            if (activeFilters.has(t.id)) {
-              activeFilters.delete(t.id);
+        // ── Family Trips section ─────────────────────
+        const familySection = L.DomUtil.create('div', 'panel-section', body);
+
+        const familyHeader = L.DomUtil.create('div', 'section-toggle', familySection);
+        const familyIcon = document.createElement('span');
+        familyIcon.className = 'section-icon';
+        familyIcon.textContent = '👨‍👩‍👧‍👦';
+        const familyLabel = document.createElement('span');
+        familyLabel.className = 'section-label';
+        familyLabel.textContent = 'Family Trips';
+        const familySwitch = document.createElement('div');
+        familySwitch.className = 'toggle-switch on';
+        familyHeader.append(familyIcon, familyLabel, familySwitch);
+
+        let familyVisible = true;
+
+        L.DomEvent.on(familyHeader, 'click', (e) => {
+          L.DomEvent.preventDefault(e);
+          familyVisible = !familyVisible;
+          familySwitch.classList.toggle('on', familyVisible);
+          familyTrips.forEach(trip => {
+            tripState.set(trip.key, familyVisible);
+            if (familyVisible) {
+              TravelMap.renderTrip(trip);
             } else {
-              activeFilters.add(t.id);
+              TravelMap.hideTrip(trip.key);
             }
-            applyFilters();
           });
-          filters.appendChild(chip);
+          recalcStats();
         });
 
-        const list = L.DomUtil.create('div', 'trips-panel-list', body);
+        // ── Eric's Trips section ─────────────────────
+        const ericSection = L.DomUtil.create('div', 'panel-section', body);
 
-        trips.forEach(trip => {
-          const btn = L.DomUtil.create('a', 'trip-toggle-btn active', list);
+        const ericHeader = L.DomUtil.create('div', 'section-toggle', ericSection);
+        const ericIcon = document.createElement('span');
+        ericIcon.className = 'section-icon';
+        ericIcon.textContent = '🗺️';
+        const ericLabel = document.createElement('span');
+        ericLabel.className = 'section-label';
+        ericLabel.textContent = "Eric's Trips";
+        const ericChevron = document.createElement('span');
+        ericChevron.className = 'section-chevron';
+        ericChevron.textContent = '▸';
+        ericHeader.append(ericIcon, ericLabel, ericChevron);
+
+        const ericList = L.DomUtil.create('div', 'section-list collapsed', ericSection);
+
+        ericTrips.forEach(trip => {
+          const btn = document.createElement('a');
+          btn.className = 'trip-toggle-btn';
           btn.href = '#';
 
           const icon = document.createElement('span');
@@ -106,7 +139,6 @@ document.addEventListener('DOMContentLoaded', async () => {
           year.textContent = trip.year;
 
           btn.append(icon, name, year);
-          btn.dataset.key = trip.key;
 
           L.DomEvent.on(btn, 'click', (e) => {
             L.DomEvent.preventDefault(e);
@@ -114,14 +146,22 @@ document.addEventListener('DOMContentLoaded', async () => {
             tripState.set(trip.key, !on);
             btn.classList.toggle('active', !on);
             if (!on) {
-              TravelMap.showTrip(trip.key);
+              TravelMap.renderTrip(trip);
             } else {
               TravelMap.hideTrip(trip.key);
             }
-            updateStatsFromVisible();
+            recalcStats();
           });
+
+          ericList.appendChild(btn);
         });
 
+        L.DomEvent.on(ericHeader, 'click', () => {
+          ericList.classList.toggle('collapsed');
+          ericChevron.textContent = ericList.classList.contains('collapsed') ? '▸' : '▾';
+        });
+
+        // ── Main panel collapse ──────────────────────
         L.DomEvent.on(header, 'click', () => {
           container.classList.toggle('expanded');
         });
@@ -132,42 +172,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     new Control().addTo(leafletMap);
 
-    function applyFilters() {
-      TravelMap.clearAll();
-      const btns = document.querySelectorAll('.trip-toggle-btn');
+    familyTrips.forEach(trip => TravelMap.renderTrip(trip));
+    TravelMap.fitAll();
 
-      trips.forEach((trip, i) => {
-        const matchesFilter = activeFilters.size > 0 &&
-          trip.travelers.some(tid => activeFilters.has(tid));
-
-        if (matchesFilter) {
-          tripState.set(trip.key, true);
-          TravelMap.renderTrip(trip);
-          btns[i].classList.add('active');
-          btns[i].style.display = '';
-        } else {
-          tripState.set(trip.key, false);
-          btns[i].classList.remove('active');
-          btns[i].style.display = 'none';
-        }
-      });
-
-      TravelMap.fitAll();
-      updateStatsFromVisible();
-    }
-
-    function updateStatsFromVisible() {
-      const visible = trips.filter(t => tripState.get(t.key));
+    function recalcStats() {
+      const allTrips = [...familyTrips, ...ericTrips];
+      const visible = allTrips.filter(t => tripState.get(t.key));
       updateStats(visible);
     }
-
-    TravelMap.renderTrips(trips);
-  }
-
-  function getStopCount(trip) {
-    if (trip.mode === 'pins') return trip.cities.length;
-    if (trip.mode === 'hub-spoke') return trip.spokes.length + trip.spokes.filter(s => s.chain).reduce((a, s) => a + s.chain.length, 0);
-    return trip.stops ? trip.stops.length : 0;
   }
 
   function updateStats(visibleTrips) {
@@ -186,7 +198,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       } else if (trip.stops) {
         trip.stops.forEach(s => cities.add(s.name));
       }
-
       if (trip.countries) trip.countries.forEach(c => countries.add(c));
     });
 
