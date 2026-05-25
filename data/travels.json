@@ -9,35 +9,73 @@
   ],
   "trips": [
     {
-      "key": "family-trips",
-      "name": "Family Trips",
-      "year": "2002-2026",
-      "icon": "👨‍👩‍👧‍👦",
+      "key": "family-2026-grand-cayman",
+      "name": "Grand Cayman",
+      "year": "2026",
+      "icon": "🏝️",
       "color": "#ffd700",
       "mode": "pins",
       "travelers": ["family", "eric", "carl", "mika", "marianne", "todd"],
-      "countries": ["Canada", "United States", "Mexico", "Honduras", "Cayman Islands", "Switzerland", "Croatia", "Bonaire", "Indonesia", "Vietnam", "France", "United Kingdom", "Netherlands", "Germany", "Belgium"],
+      "countries": ["Cayman Islands"],
       "cities": [
-        { "name": "Whistler, BC",        "lat": 50.1163,  "lng": -122.9574, "note": "Annual ski trip — 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011" },
-        { "name": "Zermatt",             "lat": 46.0207,  "lng": 7.7491,    "note": "Ski trips — Jan 2015, Jan 2017, Jan 2019" },
-        { "name": "Grand Cayman",        "lat": 19.3222,  "lng": -81.2409,  "note": "Apr 2014, Apr 2026" },
-        { "name": "Roatan, Honduras",    "lat": 16.3220,  "lng": -86.5305,  "note": "2025" },
-        { "name": "Puerto Vallarta",     "lat": 20.6534,  "lng": -105.2253, "note": "Dec 2024" },
-        { "name": "Palm Springs",        "lat": 33.8303,  "lng": -116.5453, "note": "Dec 2023" },
-        { "name": "Palm Desert",         "lat": 33.7225,  "lng": -116.3764, "note": "Dec 2022" },
-        { "name": "Breckenridge, CO",    "lat": 39.4817,  "lng": -106.0484, "note": "Feb 2020" },
-        { "name": "Cozumel, Mexico",     "lat": 20.4318,  "lng": -86.9203,  "note": "Dec 2019" },
-        { "name": "Bonaire",             "lat": 12.2019,  "lng": -68.2624,  "note": "Dec 2017" },
-        { "name": "Key West, FL",        "lat": 24.5551,  "lng": -81.7800,  "note": "Dec 2015" },
-        { "name": "Key Largo, FL",       "lat": 25.0865,  "lng": -80.4473,  "note": "Dec 2013" },
-        { "name": "New River Gorge, WV", "lat": 38.0706,  "lng": -80.7280,  "note": "Rafting — Aug 2013" },
-        { "name": "San Francisco",       "lat": 37.7749,  "lng": -122.4194, "note": "Nov 2013" },
-        { "name": "Vail, CO",            "lat": 39.6433,  "lng": -106.3781, "note": "Mar 2012" }
+        { "name": "Grand Cayman", "lat": 19.3222, "lng": -81.2409, "note": "April 2026" }
+      ]
+    },
+    {
+      "key": "family-2025-roatan",
+      "name": "Roatan, Honduras",
+      "year": "2025",
+      "icon": "🤿",
+      "color": "#ffd700",
+      "mode": "pins",
+      "travelers": ["family", "eric", "carl", "mika", "marianne", "todd"],
+      "countries": ["Honduras"],
+      "cities": [
+        { "name": "Roatan, Honduras", "lat": 16.3220, "lng": -86.5305, "note": "2025" }
+      ]
+    },
+    {
+      "key": "family-2024-puerto-vallarta",
+      "name": "Puerto Vallarta",
+      "year": "2024",
+      "icon": "🌮",
+      "color": "#ffd700",
+      "mode": "pins",
+      "travelers": ["family", "eric", "carl", "mika", "marianne", "todd"],
+      "countries": ["Mexico"],
+      "cities": [
+        { "name": "Puerto Vallarta", "lat": 20.6534, "lng": -105.2253, "note": "Dec 2024" }
+      ]
+    },
+    {
+      "key": "family-2023-palm-springs",
+      "name": "Palm Springs",
+      "year": "2023",
+      "icon": "🌴",
+      "color": "#ffd700",
+      "mode": "pins",
+      "travelers": ["family", "eric", "carl", "mika", "marianne", "todd"],
+      "countries": ["United States"],
+      "cities": [
+        { "name": "Palm Springs", "lat": 33.8303, "lng": -116.5453, "note": "Dec 2023" }
+      ]
+    },
+    {
+      "key": "family-2022-palm-desert",
+      "name": "Palm Desert",
+      "year": "2022",
+      "icon": "🌴",
+      "color": "#ffd700",
+      "mode": "pins",
+      "travelers": ["family", "eric", "carl", "mika", "marianne", "todd"],
+      "countries": ["United States"],
+      "cities": [
+        { "name": "Palm Desert", "lat": 33.7225, "lng": -116.3764, "note": "Dec 2022" }
       ]
     },
     {
       "key": "family-2022-asia",
-      "name": "2022 Indonesia + Vietnam",
+      "name": "Indonesia + Vietnam",
       "year": "2022",
       "icon": "🌴",
       "color": "#ffd700",
@@ -52,8 +90,34 @@
       ]
     },
     {
+      "key": "family-2020-breckenridge",
+      "name": "Breckenridge",
+      "year": "2020",
+      "icon": "⛷️",
+      "color": "#ffd700",
+      "mode": "pins",
+      "travelers": ["family", "eric", "carl", "mika", "marianne", "todd"],
+      "countries": ["United States"],
+      "cities": [
+        { "name": "Breckenridge, CO", "lat": 39.4817, "lng": -106.0484, "note": "Feb 2020" }
+      ]
+    },
+    {
+      "key": "family-2019-cozumel",
+      "name": "Cozumel",
+      "year": "2019",
+      "icon": "🤿",
+      "color": "#ffd700",
+      "mode": "pins",
+      "travelers": ["family", "eric", "carl", "mika", "marianne", "todd"],
+      "countries": ["Mexico"],
+      "cities": [
+        { "name": "Cozumel, Mexico", "lat": 20.4318, "lng": -86.9203, "note": "Dec 2019" }
+      ]
+    },
+    {
       "key": "family-2019-croatia",
-      "name": "2019 Croatia",
+      "name": "Croatia",
       "year": "2019",
       "icon": "🏖️",
       "color": "#ffd700",
@@ -67,8 +131,125 @@
       ]
     },
     {
+      "key": "family-2019-zermatt",
+      "name": "Zermatt",
+      "year": "2019",
+      "icon": "⛷️",
+      "color": "#ffd700",
+      "mode": "pins",
+      "travelers": ["family", "eric", "carl", "mika", "marianne", "todd"],
+      "countries": ["Switzerland"],
+      "cities": [
+        { "name": "Zermatt", "lat": 46.0207, "lng": 7.7491, "note": "Jan 2019" }
+      ]
+    },
+    {
+      "key": "family-2017-bonaire",
+      "name": "Bonaire",
+      "year": "2017",
+      "icon": "🤿",
+      "color": "#ffd700",
+      "mode": "pins",
+      "travelers": ["family", "eric", "carl", "mika", "marianne", "todd"],
+      "countries": ["Bonaire"],
+      "cities": [
+        { "name": "Bonaire", "lat": 12.2019, "lng": -68.2624, "note": "Dec 2017" }
+      ]
+    },
+    {
+      "key": "family-2017-zermatt",
+      "name": "Zermatt",
+      "year": "2017",
+      "icon": "⛷️",
+      "color": "#ffd700",
+      "mode": "pins",
+      "travelers": ["family", "eric", "carl", "mika", "marianne", "todd"],
+      "countries": ["Switzerland"],
+      "cities": [
+        { "name": "Zermatt", "lat": 46.0207, "lng": 7.7491, "note": "Jan 2017" }
+      ]
+    },
+    {
+      "key": "family-2015-key-west",
+      "name": "Key West",
+      "year": "2015",
+      "icon": "🏝️",
+      "color": "#ffd700",
+      "mode": "pins",
+      "travelers": ["family", "eric", "carl", "mika", "marianne", "todd"],
+      "countries": ["United States"],
+      "cities": [
+        { "name": "Key West, FL", "lat": 24.5551, "lng": -81.7800, "note": "Dec 2015" }
+      ]
+    },
+    {
+      "key": "family-2015-zermatt",
+      "name": "Zermatt",
+      "year": "2015",
+      "icon": "⛷️",
+      "color": "#ffd700",
+      "mode": "pins",
+      "travelers": ["family", "eric", "carl", "mika", "marianne", "todd"],
+      "countries": ["Switzerland"],
+      "cities": [
+        { "name": "Zermatt", "lat": 46.0207, "lng": 7.7491, "note": "Jan 2015" }
+      ]
+    },
+    {
+      "key": "family-2014-grand-cayman",
+      "name": "Grand Cayman",
+      "year": "2014",
+      "icon": "🏝️",
+      "color": "#ffd700",
+      "mode": "pins",
+      "travelers": ["family", "eric", "carl", "mika", "marianne", "todd"],
+      "countries": ["Cayman Islands"],
+      "cities": [
+        { "name": "Grand Cayman", "lat": 19.3222, "lng": -81.2409, "note": "April 2014" }
+      ]
+    },
+    {
+      "key": "family-2013-key-largo",
+      "name": "Key Largo",
+      "year": "2013",
+      "icon": "🤿",
+      "color": "#ffd700",
+      "mode": "pins",
+      "travelers": ["family", "eric", "carl", "mika", "marianne", "todd"],
+      "countries": ["United States"],
+      "cities": [
+        { "name": "Key Largo, FL", "lat": 25.0865, "lng": -80.4473, "note": "Dec 2013" }
+      ]
+    },
+    {
+      "key": "family-2013-wv-rafting",
+      "name": "West Virginia Rafting",
+      "year": "2013",
+      "icon": "🚣",
+      "color": "#ffd700",
+      "mode": "pins",
+      "travelers": ["family", "eric", "carl", "mika", "marianne", "todd"],
+      "countries": ["United States"],
+      "cities": [
+        { "name": "New River Gorge, WV", "lat": 38.0706, "lng": -80.7280, "note": "Rafting — Aug 2013" }
+      ]
+    },
+    {
+      "key": "family-2013-sf",
+      "name": "San Francisco",
+      "year": "2013",
+      "icon": "🌉",
+      "color": "#ffd700",
+      "mode": "pins",
+      "travelers": ["family", "eric", "carl", "mika", "marianne", "todd"],
+      "countries": ["United States"],
+      "cities": [
+        { "name": "San Francisco", "lat": 37.7749, "lng": -122.4194, "note": "Nov 2013" }
+      ]
+    },
+    {
       "key": "family-2012-europe",
-      "name": "2012 Europe",
+      "name": "Europe",
       "year": "2012",
       "icon": "🏰",
       "color": "#ffd700",
@@ -84,8 +265,21 @@
       ]
     },
     {
+      "key": "family-2012-vail",
+      "name": "Vail",
+      "year": "2012",
+      "icon": "⛷️",
+      "color": "#ffd700",
+      "mode": "pins",
+      "travelers": ["family", "eric", "carl", "mika", "marianne", "todd"],
+      "countries": ["United States"],
+      "cities": [
+        { "name": "Vail, CO", "lat": 39.6433, "lng": -106.3781, "note": "March 2012" }
+      ]
+    },
+    {
       "key": "family-2011-paris-england",
-      "name": "2011 Paris & England",
+      "name": "Paris & England",
       "year": "2011",
       "icon": "🗼",
       "color": "#ffd700",
@@ -96,6 +290,136 @@
       "stops": [
         { "num": 1, "name": "Paris",   "lat": 48.8566, "lng": 2.3522,  "type": "hub" },
         { "num": 2, "name": "London",  "lat": 51.5074, "lng": -0.1278, "type": "hub" }
+      ]
+    },
+    {
+      "key": "family-2011-whistler",
+      "name": "Whistler",
+      "year": "2011",
+      "icon": "⛷️",
+      "color": "#ffd700",
+      "mode": "pins",
+      "travelers": ["family", "eric", "carl", "mika", "marianne", "todd"],
+      "countries": ["Canada"],
+      "cities": [
+        { "name": "Whistler, BC", "lat": 50.1163, "lng": -122.9574, "note": "March 2011" }
+      ]
+    },
+    {
+      "key": "family-2010-whistler",
+      "name": "Whistler",
+      "year": "2010",
+      "icon": "⛷️",
+      "color": "#ffd700",
+      "mode": "pins",
+      "travelers": ["family", "eric", "carl", "mika", "marianne", "todd"],
+      "countries": ["Canada"],
+      "cities": [
+        { "name": "Whistler, BC", "lat": 50.1163, "lng": -122.9574, "note": "March 2010" }
+      ]
+    },
+    {
+      "key": "family-2009-whistler",
+      "name": "Whistler",
+      "year": "2009",
+      "icon": "⛷️",
+      "color": "#ffd700",
+      "mode": "pins",
+      "travelers": ["family", "eric", "carl", "mika", "marianne", "todd"],
+      "countries": ["Canada"],
+      "cities": [
+        { "name": "Whistler, BC", "lat": 50.1163, "lng": -122.9574, "note": "March 2009" }
+      ]
+    },
+    {
+      "key": "family-2008-whistler",
+      "name": "Whistler",
+      "year": "2008",
+      "icon": "⛷️",
+      "color": "#ffd700",
+      "mode": "pins",
+      "travelers": ["family", "eric", "carl", "mika", "marianne", "todd"],
+      "countries": ["Canada"],
+      "cities": [
+        { "name": "Whistler, BC", "lat": 50.1163, "lng": -122.9574, "note": "March 2008" }
+      ]
+    },
+    {
+      "key": "family-2007-whistler",
+      "name": "Whistler",
+      "year": "2007",
+      "icon": "⛷️",
+      "color": "#ffd700",
+      "mode": "pins",
+      "travelers": ["family", "eric", "carl", "mika", "marianne", "todd"],
+      "countries": ["Canada"],
+      "cities": [
+        { "name": "Whistler, BC", "lat": 50.1163, "lng": -122.9574, "note": "March 2007" }
+      ]
+    },
+    {
+      "key": "family-2006-whistler",
+      "name": "Whistler",
+      "year": "2006",
+      "icon": "⛷️",
+      "color": "#ffd700",
+      "mode": "pins",
+      "travelers": ["family", "eric", "carl", "mika", "marianne", "todd"],
+      "countries": ["Canada"],
+      "cities": [
+        { "name": "Whistler, BC", "lat": 50.1163, "lng": -122.9574, "note": "March 2006" }
+      ]
+    },
+    {
+      "key": "family-2005-whistler",
+      "name": "Whistler",
+      "year": "2005",
+      "icon": "⛷️",
+      "color": "#ffd700",
+      "mode": "pins",
+      "travelers": ["family", "eric", "carl", "mika", "marianne", "todd"],
+      "countries": ["Canada"],
+      "cities": [
+        { "name": "Whistler, BC", "lat": 50.1163, "lng": -122.9574, "note": "March 2005" }
+      ]
+    },
+    {
+      "key": "family-2004-whistler",
+      "name": "Whistler",
+      "year": "2004",
+      "icon": "⛷️",
+      "color": "#ffd700",
+      "mode": "pins",
+      "travelers": ["family", "eric", "carl", "mika", "marianne", "todd"],
+      "countries": ["Canada"],
+      "cities": [
+        { "name": "Whistler, BC", "lat": 50.1163, "lng": -122.9574, "note": "March 2004" }
+      ]
+    },
+    {
+      "key": "family-2003-whistler",
+      "name": "Whistler",
+      "year": "2003",
+      "icon": "⛷️",
+      "color": "#ffd700",
+      "mode": "pins",
+      "travelers": ["family", "eric", "carl", "mika", "marianne", "todd"],
+      "countries": ["Canada"],
+      "cities": [
+        { "name": "Whistler, BC", "lat": 50.1163, "lng": -122.9574, "note": "March 2003" }
+      ]
+    },
+    {
+      "key": "family-2002-whistler",
+      "name": "Whistler",
+      "year": "2002",
+      "icon": "⛷️",
+      "color": "#ffd700",
+      "mode": "pins",
+      "travelers": ["family", "eric", "carl", "mika", "marianne", "todd"],
+      "countries": ["Canada"],
+      "cities": [
+        { "name": "Whistler, BC", "lat": 50.1163, "lng": -122.9574, "note": "March 2002" }
       ]
     },
     {
@@ -232,6 +556,23 @@
       ]
     },
     {
+      "key": "2022-road-trip",
+      "name": "2022 Dec Drive",
+      "year": "2022",
+      "icon": "🚗",
+      "color": "#ab47bc",
+      "pathColor": "rgba(171, 71, 188, 0.4)",
+      "mode": "linear",
+      "travelers": ["eric", "marianne"],
+      "countries": ["Canada", "United States"],
+      "stops": [
+        { "num": 1, "name": "Toronto",      "lat": 43.6532,  "lng": -79.3832,  "type": "home" },
+        { "num": 2, "name": "Nashville",    "lat": 36.1627,  "lng": -86.7816,  "type": "stop" },
+        { "num": 3, "name": "Amarillo",     "lat": 35.2220,  "lng": -101.8313, "type": "stop" },
+        { "num": 4, "name": "Palm Desert",  "lat": 33.7225,  "lng": -116.3764, "type": "hub" }
+      ]
+    },
+    {
       "key": "2023-road-trip",
       "name": "2023 Dec Drive",
       "year": "2023",
@@ -239,13 +580,13 @@
       "color": "#ffa726",
       "pathColor": "rgba(255, 167, 38, 0.4)",
       "mode": "linear",
-      "travelers": ["eric"],
+      "travelers": ["eric", "mika", "todd"],
       "countries": ["Canada", "United States"],
       "stops": [
         { "num": 1, "name": "Toronto",      "lat": 43.6532,  "lng": -79.3832,  "type": "home" },
-        { "num": 2, "name": "Springfield",  "lat": 37.2090,  "lng": -93.2923,  "type": "hub" },
-        { "num": 3, "name": "Santa Fe",     "lat": 35.6870,  "lng": -105.9378, "type": "hub" },
-        { "num": 4, "name": "Palm Desert",  "lat": 33.7225,  "lng": -116.3764, "type": "hub" }
+        { "num": 2, "name": "Springfield",  "lat": 37.2090,  "lng": -93.2923,  "type": "stop" },
+        { "num": 3, "name": "Santa Fe",     "lat": 35.6870,  "lng": -105.9378, "type": "stop" },
+        { "num": 4, "name": "Palm Springs", "lat": 33.8303,  "lng": -116.5453, "type": "hub" }
       ]
     },
     {
@@ -256,7 +597,7 @@
       "color": "#f06292",
       "pathColor": "rgba(240, 98, 146, 0.4)",
       "mode": "linear",
-      "travelers": ["eric"],
+      "travelers": ["eric", "todd", "carl"],
       "countries": ["United States"],
       "stops": [
         { "num": 1, "name": "San Jose",     "lat": 37.3382,  "lng": -121.8863, "type": "home" },

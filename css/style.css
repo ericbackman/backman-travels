@@ -173,7 +173,7 @@ main {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   min-width: 220px;
-  max-width: 280px;
+  max-width: 300px;
   overflow: hidden;
   box-shadow: 0 4px 16px var(--shadow);
 }
@@ -292,7 +292,7 @@ main {
 }
 
 .section-list {
-  max-height: 300px;
+  max-height: 400px;
   overflow-y: auto;
 }
 
@@ -309,7 +309,7 @@ main {
   padding: 8px 14px;
   cursor: pointer;
   font-size: 0.8rem;
-  color: var(--text-muted);
+  color: var(--text);
   text-decoration: none;
   transition: var(--transition);
   border-bottom: 1px solid var(--border);
@@ -331,7 +331,8 @@ main {
 
 .trip-toggle-icon {
   flex-shrink: 0;
-  font-size: 1rem;
+  font-size: 1.1rem;
+  line-height: 1;
 }
 
 .trip-toggle-name {

@@ -51,6 +51,7 @@ const TravelMap = (() => {
   }
 
   function renderTrip(trip) {
+    if (tripLayers[trip.key]) return; // already on map, skip duplicate render
     if (trip.mode === 'linear') {
       const layers = renderLinear(trip);
       const group = L.layerGroup(layers).addTo(map);
