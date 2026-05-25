@@ -1936,6 +1936,168 @@
           "note": "Switzerland"
         }
       ]
+    },
+    {
+      "key": "carl-2019-road-trip",
+      "name": "2019 Road Trip",
+      "year": "2019",
+      "icon": "🚗",
+      "color": "#42a5f5",
+      "pathColor": "rgba(66, 165, 245, 0.4)",
+      "mode": "linear",
+      "travelers": [
+        "carl"
+      ],
+      "countries": [
+        "Canada",
+        "United States"
+      ],
+      "stops": [
+        {
+          "num": 1,
+          "name": "Toronto",
+          "lat": 43.6532,
+          "lng": -79.3832,
+          "type": "home"
+        },
+        {
+          "num": 2,
+          "name": "Parry Sound",
+          "lat": 45.3483,
+          "lng": -80.0361,
+          "type": "stop"
+        },
+        {
+          "num": 3,
+          "name": "Duluth",
+          "lat": 46.7867,
+          "lng": -92.1005,
+          "type": "stop"
+        },
+        {
+          "num": 4,
+          "name": "Billings",
+          "lat": 45.7833,
+          "lng": -108.5007,
+          "type": "stop"
+        },
+        {
+          "num": 5,
+          "name": "Yellowstone NP",
+          "lat": 44.428,
+          "lng": -110.5885,
+          "type": "stop",
+          "note": "Camping"
+        },
+        {
+          "num": 6,
+          "name": "Glacier NP",
+          "lat": 48.7596,
+          "lng": -113.787,
+          "type": "stop",
+          "note": "Camping"
+        },
+        {
+          "num": 7,
+          "name": "Kelowna",
+          "lat": 49.888,
+          "lng": -119.496,
+          "type": "stop"
+        },
+        {
+          "num": 8,
+          "name": "Vancouver",
+          "lat": 49.2827,
+          "lng": -123.1207,
+          "type": "hub"
+        },
+        {
+          "num": 9,
+          "name": "Portland",
+          "lat": 45.5051,
+          "lng": -122.675,
+          "type": "stop"
+        },
+        {
+          "num": 10,
+          "name": "Redwood National Park",
+          "lat": 41.2132,
+          "lng": -124.0046,
+          "type": "stop",
+          "note": "Multiple camping spots"
+        },
+        {
+          "num": 11,
+          "name": "Yuba City",
+          "lat": 39.1404,
+          "lng": -121.6169,
+          "type": "stop"
+        },
+        {
+          "num": 12,
+          "name": "Lake Tahoe",
+          "lat": 39.0968,
+          "lng": -120.0324,
+          "type": "stop",
+          "note": "Drove around the lake"
+        },
+        {
+          "num": 13,
+          "name": "Las Vegas",
+          "lat": 36.1699,
+          "lng": -115.1398,
+          "type": "hub"
+        },
+        {
+          "num": 14,
+          "name": "Zion NP",
+          "lat": 37.2982,
+          "lng": -113.0263,
+          "type": "stop"
+        },
+        {
+          "num": 15,
+          "name": "Bryce Canyon NP",
+          "lat": 37.593,
+          "lng": -112.1871,
+          "type": "stop"
+        },
+        {
+          "num": 16,
+          "name": "Grand Staircase-Escalante",
+          "lat": 37.7683,
+          "lng": -111.5873,
+          "type": "stop"
+        },
+        {
+          "num": 17,
+          "name": "Capitol Reef NP",
+          "lat": 38.367,
+          "lng": -111.2615,
+          "type": "stop"
+        },
+        {
+          "num": 18,
+          "name": "Moab",
+          "lat": 38.5733,
+          "lng": -109.5498,
+          "type": "stop"
+        },
+        {
+          "num": 19,
+          "name": "Grand Junction",
+          "lat": 39.0639,
+          "lng": -108.5506,
+          "type": "stop"
+        },
+        {
+          "num": 20,
+          "name": "Toronto",
+          "lat": 43.6532,
+          "lng": -79.3832,
+          "type": "home"
+        }
+      ]
     }
   ]
 }
