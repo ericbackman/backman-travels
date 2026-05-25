@@ -230,6 +230,44 @@ const TravelMap = (() => {
     `;
   }
 
+  function renderMemberPins(memberId, color, cities) {
+    const key = `member-${memberId}`;
+    if (tripLayers[key]) return;
+
+    const cluster = L.markerClusterGroup({
+      maxClusterRadius: 40,
+      iconCreateFunction: (c) => {
+        const count = c.getChildCount();
+        return L.divIcon({
+          className: '',
+          html: `<div class="cluster-marker" style="background:${color}">${count}</div>`,
+          iconSize: [36, 36],
+          iconAnchor: [18, 18]
+        });
+      },
+      spiderfyOnMaxZoom: true,
+      showCoverageOnHover: false
+    });
+
+    cities.forEach(city => {
+      const m = createFamilyPinMarker(city, color);
+      m.bindTooltip(city.name, { direction: 'top', offset: [0, -14] });
+      cluster.addLayer(m);
+    });
+
+    cluster.addTo(map);
+    tripLayers[key] = cluster;
+    allLayers.push(cluster);
+  }
+
+  function hideMemberPins(memberId) {
+    const key = `member-${memberId}`;
+    if (tripLayers[key]) {
+      map.removeLayer(tripLayers[key]);
+      delete tripLayers[key];
+    }
+  }
+
   function showTrip(key) {
     if (tripLayers[key]) {
       tripLayers[key].addTo(map);
@@ -239,6 +277,7 @@ const TravelMap = (() => {
   function hideTrip(key) {
     if (tripLayers[key]) {
       map.removeLayer(tripLayers[key]);
+      delete tripLayers[key]; // clear reference so renderTrip can re-add it
     }
   }
 
@@ -279,5 +318,5 @@ const TravelMap = (() => {
     allLayers = [];
   }
 
-  return { init, switchTheme, renderTrips, renderTrip, showTrip, hideTrip, flyToTrip, fitAll, clearAll };
+  return { init, switchTheme, renderTrips, renderTrip, showTrip, hideTrip, renderMemberPins, hideMemberPins, flyToTrip, fitAll, clearAll };
 })();

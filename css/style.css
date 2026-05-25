@@ -172,7 +172,7 @@ main {
   backdrop-filter: blur(12px);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  min-width: 220px;
+  min-width: 230px;
   max-width: 300px;
   overflow: hidden;
   box-shadow: 0 4px 16px var(--shadow);
@@ -303,8 +303,8 @@ main {
 }
 
 /* Trip toggle buttons
-   Use .trips-panel prefix to beat Leaflet's .leaflet-bar a { color:black; background:#fff }
-   specificity: 2 classes (0-2-0) > 1 class + 1 element (0-1-1)           */
+   .trips-panel prefix beats Leaflet's .leaflet-bar a { color:black; bg:#fff }
+   specificity: 0-2-0 > 0-1-1                                               */
 
 .trips-panel .trip-toggle-btn {
   display: flex;
@@ -312,7 +312,6 @@ main {
   gap: 8px;
   padding: 7px 12px;
   cursor: pointer;
-  font-size: 0.8rem;
   color: var(--text);
   background: transparent;
   text-decoration: none;
@@ -335,23 +334,39 @@ main {
   color: var(--accent);
 }
 
+.trips-panel .trip-toggle-btn.active .trip-toggle-year {
+  color: var(--accent);
+  opacity: 0.75;
+}
+
 .trip-toggle-icon {
   flex-shrink: 0;
-  font-size: 1rem;
+  font-size: 1.1rem;
   line-height: 1;
+  align-self: flex-start;
+  margin-top: 1px;
+}
+
+/* Two-line layout: name on top, year below */
+.trip-toggle-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0; /* allow text truncation inside flex */
 }
 
 .trip-toggle-name {
-  flex: 1;
+  font-size: 0.83rem;
+  font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .trip-toggle-year {
-  font-size: 0.68rem;
+  font-size: 0.7rem;
   color: var(--text-muted);
-  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 /* Trips Page */
@@ -604,12 +619,19 @@ main {
 
   .trips-panel .trip-toggle-btn {
     padding: 6px 10px;
-    font-size: 0.75rem;
     gap: 6px;
   }
 
+  .trip-toggle-name {
+    font-size: 0.78rem;
+  }
+
+  .trip-toggle-year {
+    font-size: 0.65rem;
+  }
+
   .trip-toggle-icon {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
   }
 
   .section-list {
