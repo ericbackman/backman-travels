@@ -14,9 +14,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   renderTripsPage(trips);
   renderStatsPage(travelers, trips);
 
-  // ─── Theme ──────────────────────────────────────────────────────────
+  // ─── Theme ───────────────────────────────────────────────────────────
   function initThemeToggle() {
-    const btn = document.getElementById('theme-toggle');
+    const btn   = document.getElementById('theme-toggle');
     const saved = localStorage.getItem('backman-theme') || 'dark';
     setTheme(saved);
     btn.addEventListener('click', () => {
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     familyTrips.forEach(t   => tripState.set(t.key, true));
     personalTrips.forEach(t => tripState.set(t.key, false));
 
-    // buttonRegistry: trip.key → all DOM buttons for that trip (cross-section sync)
+    // buttonRegistry: trip.key → all buttons across every section (cross-section sync)
     const buttonRegistry = {};
     personalTrips.forEach(t => { buttonRegistry[t.key] = []; });
 
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         L.DomEvent.disableClickPropagation(container);
         L.DomEvent.disableScrollPropagation(container);
 
-        // Panel header — collapses the whole panel
+        // Outer collapse header
         const header = L.DomUtil.create('div', 'trips-panel-header', container);
         const headerLabel = document.createElement('span');
         headerLabel.className = 'trips-panel-header-label';
@@ -78,16 +78,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const body = L.DomUtil.create('div', 'trips-panel-body', container);
 
-        // ── 1. Family Trips section (expanded, all ON by default) ──────
         buildFamilySection(body);
 
-        // ── 2–6. Individual member sections (collapsed, all OFF) ────────
         const members = [
-          { id: 'eric',     label: "Eric's Trips",     icon: '🧭' },
-          { id: 'carl',     label: "Carl's Trips",     icon: '🎿' },
-          { id: 'mika',     label: "Mika's Trips",     icon: '🧳' },
-          { id: 'marianne', label: "Marianne's Trips", icon: '🌺' },
-          { id: 'todd',     label: "Todd's Trips",     icon: '🎒' }
+          { id: 'eric',     label: "Eric",     icon: '🧭' },
+          { id: 'carl',     label: "Carl",     icon: '🎿' },
+          { id: 'mika',     label: "Mika",     icon: '🧳' },
+          { id: 'marianne', label: "Marianne", icon: '🌺' },
+          { id: 'todd',     label: "Todd",     icon: '🎒' }
         ];
         members.forEach(m => buildMemberSection(body, m));
 
@@ -99,10 +97,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     familyTrips.forEach(trip => TravelMap.renderTrip(trip));
     TravelMap.fitAll();
 
-    // ── Section builders ──────────────────────────────────────────────
+    // ── Section builders ────────────────────────────────────────────────
 
     function buildFamilySection(body) {
-      const section = buildSectionShell(body, '👨‍👩‍👧‍👦', 'Family Trips', false);
+      const { list, masterSwitch } = buildSectionShell(
+        body, '👨‍👩‍👧‍👦', 'Family', false, true
+      );
+
+      const familyBtns = [];
 
       familyTrips.forEach(trip => {
         const btn = buildTripBtn(trip, true);
@@ -115,7 +117,22 @@ document.addEventListener('DOMContentLoaded', async () => {
           else     TravelMap.hideTrip(trip.key);
           recalcStats();
         });
-        section.list.appendChild(btn);
+        familyBtns.push(btn);
+        list.appendChild(btn);
+      });
+
+      // Master toggle — bulk on/off all family trips
+      L.DomEvent.on(masterSwitch, 'click', e => {
+        L.DomEvent.stopPropagation(e);
+        L.DomEvent.preventDefault(e);
+        const on = masterSwitch.classList.toggle('on');
+        familyTrips.forEach((trip, i) => {
+          tripState.set(trip.key, on);
+          familyBtns[i].classList.toggle('active', on);
+          if (on) TravelMap.renderTrip(trip);
+          else    TravelMap.hideTrip(trip.key);
+        });
+        recalcStats();
       });
     }
 
@@ -123,7 +140,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       const memberTrips = personalTrips.filter(t => t.travelers.includes(member.id));
       if (!memberTrips.length) return;
 
-      const section = buildSectionShell(body, member.icon, member.label, true);
+      const { list, masterSwitch } = buildSectionShell(
+        body, member.icon, member.label, true, false
+      );
 
       memberTrips.forEach(trip => {
         const btn = buildTripBtn(trip, false);
@@ -134,41 +153,74 @@ document.addEventListener('DOMContentLoaded', async () => {
           const on  = tripState.get(trip.key);
           const next = !on;
           tripState.set(trip.key, next);
-          // Sync every button for this trip across all member sections
+          // Sync all buttons for this trip across every section
           buttonRegistry[trip.key].forEach(b => b.classList.toggle('active', next));
           if (next) TravelMap.renderTrip(trip);
           else      TravelMap.hideTrip(trip.key);
           recalcStats();
         });
 
-        section.list.appendChild(btn);
+        list.appendChild(btn);
+      });
+
+      // Master toggle — bulk on/off all of this member's trips
+      L.DomEvent.on(masterSwitch, 'click', e => {
+        L.DomEvent.stopPropagation(e);
+        L.DomEvent.preventDefault(e);
+        const on = masterSwitch.classList.toggle('on');
+        memberTrips.forEach(trip => {
+          tripState.set(trip.key, on);
+          buttonRegistry[trip.key].forEach(b => b.classList.toggle('active', on));
+          if (on) TravelMap.renderTrip(trip);
+          else    TravelMap.hideTrip(trip.key);
+        });
+        recalcStats();
       });
     }
 
-    // Returns { section, list } — shared structure for both section types
-    function buildSectionShell(body, iconText, labelText, collapsed) {
+    // ── Shared helpers ──────────────────────────────────────────────────
+
+    /**
+     * Builds the collapsible section shell.
+     * Returns { section, list, masterSwitch } so callers can attach handlers.
+     * The master toggle switch click must be wired by the caller (stopPropagation
+     * prevents the header's collapse listener from also firing).
+     */
+    function buildSectionShell(body, iconText, labelText, startCollapsed, startOn) {
       const section = L.DomUtil.create('div', 'panel-section', body);
 
       const hdr = L.DomUtil.create('div', 'section-toggle', section);
       const icon = document.createElement('span');
       icon.className = 'section-icon';
       icon.textContent = iconText;
+
       const lbl = document.createElement('span');
       lbl.className = 'section-label';
       lbl.textContent = labelText;
+
+      // Master on/off toggle switch sits between label and chevron
+      const masterSwitch = document.createElement('div');
+      masterSwitch.className = startOn ? 'toggle-switch on' : 'toggle-switch';
+
       const chev = document.createElement('span');
       chev.className = 'section-chevron';
-      chev.textContent = collapsed ? '▸' : '▾';
-      hdr.append(icon, lbl, chev);
+      chev.textContent = startCollapsed ? '▸' : '▾';
 
-      const list = L.DomUtil.create('div', collapsed ? 'section-list collapsed' : 'section-list', section);
+      hdr.append(icon, lbl, masterSwitch, chev);
 
+      const list = L.DomUtil.create(
+        'div',
+        startCollapsed ? 'section-list collapsed' : 'section-list',
+        section
+      );
+
+      // Header click → expand/collapse the list
       L.DomEvent.on(hdr, 'click', () => {
         list.classList.toggle('collapsed');
         chev.textContent = list.classList.contains('collapsed') ? '▸' : '▾';
       });
 
-      return { section, list };
+      return { section, list, masterSwitch };
     }
 
     function buildTripBtn(trip, active) {
@@ -199,7 +251,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  // ─── Stats bar (header) ───────────────────────────────────────────────
+  // ─── Stats bar ────────────────────────────────────────────────────────
   function updateStats(visibleTrips) {
     const countries = new Set();
     const cities    = new Set();
@@ -238,7 +290,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           ? [trip.hub.name, ...trip.spokes.map(s => s.chain ? s.chain.map(c => c.name).join(' → ') : s.name)]
           : (trip.stops || []).map(s => s.name);
 
-      const el = document.createElement('div');
+      const el  = document.createElement('div');
       el.className = 'trip-detail';
 
       const hdr = document.createElement('div');
@@ -248,8 +300,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       iconEl.className = 'trip-detail-icon';
       iconEl.textContent = trip.icon;
 
-      const info = document.createElement('div');
-      const title = document.createElement('div');
+      const info     = document.createElement('div');
+      const title    = document.createElement('div');
       title.className = 'trip-detail-title';
       title.textContent = trip.name;
       const subtitle = document.createElement('div');
@@ -281,8 +333,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const allCities    = new Set();
     trips.forEach(trip => {
       if (trip.countries) trip.countries.forEach(c => allCountries.add(c));
-      if (trip.mode === 'pins') trip.cities.forEach(c => allCities.add(c.name));
-      else if (trip.stops)     trip.stops.forEach(s => allCities.add(s.name));
+      if (trip.mode === 'pins')           trip.cities.forEach(c => allCities.add(c.name));
+      else if (trip.stops)                trip.stops.forEach(s => allCities.add(s.name));
       else if (trip.mode === 'hub-spoke') {
         trip.spokes.forEach(s => {
           if (s.chain) s.chain.forEach(c => allCities.add(c.name));
@@ -299,10 +351,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     grid.className = 'stat-grid';
 
     [
-      { value: trips.length,        label: 'Total Trips' },
-      { value: allCountries.size,   label: 'Countries Visited' },
-      { value: allCities.size,      label: 'Cities Visited' },
-      { value: travelers.length,    label: 'Travelers' }
+      { value: trips.length,      label: 'Total Trips' },
+      { value: allCountries.size, label: 'Countries Visited' },
+      { value: allCities.size,    label: 'Cities Visited' },
+      { value: travelers.length,  label: 'Travelers' }
     ].forEach(({ value, label }) => {
       const card = document.createElement('div');
       card.className = 'stat-card';

@@ -211,6 +211,8 @@ main {
 .trips-panel-body {
   display: none;
   border-top: 1px solid var(--border);
+  max-height: calc(100vh - var(--header-height) - 60px);
+  overflow-y: auto;
 }
 
 .trips-panel.expanded .trips-panel-body {
@@ -229,8 +231,8 @@ main {
 .section-toggle {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 14px;
+  gap: 6px;
+  padding: 8px 12px;
   cursor: pointer;
   transition: background var(--transition);
   user-select: none;
@@ -300,38 +302,42 @@ main {
   display: none;
 }
 
-/* Trip toggle buttons */
+/* Trip toggle buttons
+   Use .trips-panel prefix to beat Leaflet's .leaflet-bar a { color:black; background:#fff }
+   specificity: 2 classes (0-2-0) > 1 class + 1 element (0-1-1)           */
 
-.trip-toggle-btn {
+.trips-panel .trip-toggle-btn {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 14px;
+  padding: 7px 12px;
   cursor: pointer;
   font-size: 0.8rem;
   color: var(--text);
+  background: transparent;
   text-decoration: none;
-  transition: var(--transition);
   border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  transition: var(--transition);
 }
 
-.trip-toggle-btn:last-child {
+.trips-panel .trip-toggle-btn:last-child {
   border-bottom: none;
 }
 
-.trip-toggle-btn:hover {
+.trips-panel .trip-toggle-btn:hover {
   background: var(--bg-hover);
   color: var(--text);
 }
 
-.trip-toggle-btn.active {
+.trips-panel .trip-toggle-btn.active {
   background: var(--accent-dim);
   color: var(--accent);
 }
 
 .trip-toggle-icon {
   flex-shrink: 0;
-  font-size: 1.1rem;
+  font-size: 1rem;
   line-height: 1;
 }
 
@@ -343,7 +349,7 @@ main {
 }
 
 .trip-toggle-year {
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   color: var(--text-muted);
   flex-shrink: 0;
 }
@@ -552,7 +558,61 @@ main {
   }
 
   .trips-panel {
-    min-width: 180px;
-    max-width: 240px;
+    min-width: 160px;
+    max-width: 210px;
+  }
+
+  .trips-panel-header {
+    padding: 8px 10px;
+  }
+
+  .trips-panel-header-label {
+    font-size: 0.8rem;
+  }
+
+  .trips-panel-body {
+    max-height: calc(100vh - var(--header-height) - 80px);
+  }
+
+  .section-toggle {
+    padding: 7px 10px;
+    gap: 5px;
+  }
+
+  .section-label {
+    font-size: 0.75rem;
+  }
+
+  .section-icon {
+    font-size: 0.85rem;
+  }
+
+  .toggle-switch {
+    width: 28px;
+    height: 15px;
+    border-radius: 8px;
+  }
+
+  .toggle-switch::after {
+    width: 9px;
+    height: 9px;
+  }
+
+  .toggle-switch.on::after {
+    left: 15px;
+  }
+
+  .trips-panel .trip-toggle-btn {
+    padding: 6px 10px;
+    font-size: 0.75rem;
+    gap: 6px;
+  }
+
+  .trip-toggle-icon {
+    font-size: 0.9rem;
+  }
+
+  .section-list {
+    max-height: 260px;
   }
 }
