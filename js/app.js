@@ -271,7 +271,16 @@ document.addEventListener('DOMContentLoaded', async () => {
       const subtitle = document.createElement('div');
       subtitle.className = 'trip-detail-subtitle';
       subtitle.textContent = `${trip.year} · ${stops.length} stop${stops.length !== 1 ? 's' : ''}`;
-      info.append(title, subtitle);
+
+      const distKm = calcTripDistanceKm(trip);
+      if (distKm) {
+        const distBadge = document.createElement('div');
+        distBadge.className = 'trip-distance-badge';
+        distBadge.textContent = formatDist(distKm);
+        info.append(title, subtitle, distBadge);
+      } else {
+        info.append(title, subtitle);
+      }
       hdr.append(iconEl, info);
 
       const stopsEl = document.createElement('div');
@@ -307,6 +316,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     });
 
+    const linearTrips = trips.filter(t => t.mode === 'linear');
+    const totalKm     = linearTrips.reduce((sum, t) => sum + (calcTripDistanceKm(t) || 0), 0);
+    const totalMi     = Math.round(totalKm * 0.621371);
+
     const heading = document.createElement('h2');
     heading.textContent = 'Travel Stats';
     container.appendChild(heading);
@@ -315,10 +328,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     grid.className = 'stat-grid';
 
     [
-      { value: trips.length,      label: 'Total Trips' },
-      { value: allCountries.size, label: 'Countries Visited' },
-      { value: allCities.size,    label: 'Cities Visited' },
-      { value: travelers.length,  label: 'Travelers' }
+      { value: trips.length,                        label: 'Total Trips' },
+      { value: allCountries.size,                   label: 'Countries Visited' },
+      { value: allCities.size,                      label: 'Cities Visited' },
+      { value: travelers.length,                    label: 'Travelers' },
+      { value: Math.round(totalKm).toLocaleString(), label: `km on route trips (${totalMi.toLocaleString()} mi)` }
     ].forEach(({ value, label }) => {
       const card = document.createElement('div');
       card.className = 'stat-card';
@@ -360,5 +374,49 @@ document.addEventListener('DOMContentLoaded', async () => {
       row.append(nameEl, barBg, countEl);
       container.appendChild(row);
     });
+
+    // ── Distance per person ──────────────────────────────────────────────────
+    const travelerKms = travelers
+      .filter(t => t.id !== 'family')
+      .map(t => ({
+        ...t,
+        km: linearTrips
+              .filter(trip => trip.travelers.includes(t.id))
+              .reduce((sum, trip) => sum + (calcTripDistanceKm(trip) || 0), 0)
+      }))
+      .filter(t => t.km > 0)
+      .sort((a, b) => b.km - a.km);
+
+    if (travelerKms.length) {
+      const maxKm = travelerKms[0].km;
+
+      const distHeading = document.createElement('h3');
+      distHeading.textContent = 'Distance per person (route trips only)';
+      distHeading.style.cssText = 'margin-top:32px;margin-bottom:12px';
+      container.appendChild(distHeading);
+
+      travelerKms.forEach(t => {
+        const mi  = Math.round(t.km * 0.621371);
+        const row = document.createElement('div');
+        row.style.cssText = 'margin-bottom:8px;display:flex;align-items:center;gap:12px';
+
+        const nameEl = document.createElement('span');
+        nameEl.style.cssText = 'width:80px;font-size:0.85rem';
+        nameEl.textContent = t.name;
+
+        const barBg = document.createElement('div');
+        barBg.style.cssText = 'flex:1;height:20px;background:var(--bg-secondary);border-radius:10px;overflow:hidden';
+        const barFill = document.createElement('div');
+        barFill.style.cssText = `height:100%;width:${(t.km / maxKm) * 100}%;background:${t.color || 'var(--accent)'};border-radius:10px;transition:0.3s`;
+        barBg.appendChild(barFill);
+
+        const labelEl = document.createElement('span');
+        labelEl.style.cssText = 'font-size:0.82rem;color:var(--text-muted);white-space:nowrap;min-width:130px;text-align:right';
+        labelEl.textContent = `${t.km.toLocaleString()} km / ${mi.toLocaleString()} mi`;
+
+        row.append(nameEl, barBg, labelEl);
+        container.appendChild(row);
+      });
+    }
   }
 });

@@ -1,3 +1,35 @@
+// ─── Distance utilities (shared by map popups and app stats) ─────────────────
+
+function haversine(lat1, lng1, lat2, lng2) {
+  const R = 6371; // Earth's mean radius in km
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) ** 2 +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+// Returns total great-circle km for a linear trip, or null for other modes.
+// Sums every consecutive stop pair, so Brindisi→Corfu→Brindisi counts as
+// two separate legs (the Corfu ferry detour is not collapsed).
+function calcTripDistanceKm(trip) {
+  if (trip.mode !== 'linear' || !trip.stops || trip.stops.length < 2) return null;
+  let km = 0;
+  for (let i = 0; i < trip.stops.length - 1; i++) {
+    km += haversine(trip.stops[i].lat, trip.stops[i].lng,
+                    trip.stops[i + 1].lat, trip.stops[i + 1].lng);
+  }
+  return Math.round(km);
+}
+
+function formatDist(km) {
+  const mi = Math.round(km * 0.621371);
+  return `${km.toLocaleString()} km · ${mi.toLocaleString()} mi`;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+
 const TravelMap = (() => {
   let map;
   let tripLayers = {};
@@ -232,10 +264,15 @@ const TravelMap = (() => {
   }
 
   function buildPopup(stop, trip) {
+    const distKm = calcTripDistanceKm(trip);
+    const distLine = distKm
+      ? `<div class="popup-meta" style="margin-top:6px">📍 Route total: ${formatDist(distKm)}</div>`
+      : '';
     return `
       <div class="popup-title">${stop.name}</div>
       <div class="popup-meta">${trip.icon} ${trip.name} (${trip.year})</div>
       ${stop.note ? `<div class="popup-meta" style="margin-top:4px">${stop.note}</div>` : ''}
+      ${distLine}
     `;
   }
 

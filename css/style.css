@@ -412,6 +412,17 @@ main {
   color: var(--text-muted);
 }
 
+/* Distance badge — shown on linear (route) trips in the Trips page */
+.trip-distance-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: var(--accent);
+  margin-top: 5px;
+  letter-spacing: 0.01em;
+}
+
 .trip-stops {
   display: flex;
   flex-wrap: wrap;
