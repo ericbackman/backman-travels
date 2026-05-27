@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           buttonRegistry[trip.key].forEach(b => b.classList.toggle('active', next));
           if (next) TravelMap.renderTrip(trip);
           else      TravelMap.hideTrip(trip.key);
-          recalcStats();
+          syncFamilyTrips();
         });
 
         list.appendChild(btn);
@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           if (on) TravelMap.renderTrip(trip);
           else    TravelMap.hideTrip(trip.key);
         });
-        recalcStats();
+        syncFamilyTrips();
       });
     }
 
@@ -201,6 +201,19 @@ document.addEventListener('DOMContentLoaded', async () => {
       const allTrips = [...familyTrips, ...personalTrips];
       const visible  = allTrips.filter(t => tripState.get(t.key));
       updateStats(visible);
+    }
+
+    // Family trips have no individual toggle — mirror their visibility to whether
+    // any personal trip is currently active. When all travelers are off the map
+    // should be completely empty; when any traveler is on, family trips show too.
+    function syncFamilyTrips() {
+      const anyPersonalActive = personalTrips.some(t => tripState.get(t.key));
+      familyTrips.forEach(trip => {
+        tripState.set(trip.key, anyPersonalActive);
+        if (anyPersonalActive) TravelMap.renderTrip(trip);   // no-op if already shown
+        else                   TravelMap.hideTrip(trip.key); // no-op if already hidden
+      });
+      recalcStats();
     }
   }
 
