@@ -494,45 +494,19 @@ main {
   font-size: 0.78rem;
 }
 
-/* Stop Markers */
-.stop-marker {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  font-size: 0.7rem;
-  font-weight: 700;
-  color: #fff;
-  border: 2px solid rgba(255,255,255,0.8);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+/* Thumbtack / pushpin markers */
+.map-tack {
+  transition: transform 0.15s ease;
+  transform-origin: center bottom; /* scale from needle tip = exact map location */
 }
 
-.city-marker {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  border: 2px solid rgba(255,255,255,0.7);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+.map-tack:hover {
+  transform: scale(1.25);
 }
 
 .hub-marker {
   font-size: 1.6rem;
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
-}
-
-.family-pin {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  border: 2.5px solid rgba(255,255,255,0.85);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
-  transition: transform 0.15s ease;
-}
-
-.family-pin:hover {
-  transform: scale(1.3);
 }
 
 .cluster-marker {

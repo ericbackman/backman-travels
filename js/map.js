@@ -86,7 +86,7 @@ const TravelMap = (() => {
 
     trip.stops.forEach(stop => {
       const marker = createStopMarker(stop, trip.color);
-      marker.bindTooltip(stop.name, { direction: 'top', offset: [0, -12] });
+      marker.bindTooltip(stop.name, { direction: 'top', offset: [0, -36] });
       marker.bindPopup(buildPopup(stop, trip));
       layers.push(marker);
     });
@@ -122,7 +122,7 @@ const TravelMap = (() => {
 
         spoke.chain.forEach(city => {
           const m = createCityMarker(city, trip.color);
-          m.bindTooltip(city.name, { direction: 'top', offset: [0, -8] });
+          m.bindTooltip(city.name, { direction: 'top', offset: [0, -20] });
           layers.push(m);
         });
       } else {
@@ -136,7 +136,7 @@ const TravelMap = (() => {
 
         const m = createCityMarker(spoke, trip.color);
         m.bindTooltip(`${spoke.name}${spoke.note ? ' — ' + spoke.note : ''}`, {
-          direction: 'top', offset: [0, -8]
+          direction: 'top', offset: [0, -20]
         });
         layers.push(m);
       }
@@ -164,7 +164,7 @@ const TravelMap = (() => {
     trip.cities.forEach(city => {
       const m = createFamilyPinMarker(city, trip.color);
       const tooltip = city.note ? `${city.name} — ${city.note}` : city.name;
-      m.bindTooltip(tooltip, { direction: 'top', offset: [0, -14] });
+      m.bindTooltip(tooltip, { direction: 'top', offset: [0, -28] });
       m.bindPopup(buildCityPopup(city, trip));
       cluster.addLayer(m);
     });
@@ -174,10 +174,16 @@ const TravelMap = (() => {
 
   function createFamilyPinMarker(city, color) {
     const icon = L.divIcon({
-      className: '',
-      html: `<div class="family-pin" style="background:${color}"></div>`,
-      iconSize: [16, 16],
-      iconAnchor: [8, 8]
+      className: 'map-tack',
+      html: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="28" viewBox="0 0 18 28">
+        <ellipse cx="9.5" cy="8.5" rx="8" ry="6.5" fill="rgba(0,0,0,0.22)"/>
+        <ellipse cx="9" cy="8" rx="8" ry="6.5" fill="${color}" stroke="rgba(255,255,255,0.82)" stroke-width="1.5"/>
+        <ellipse cx="6.5" cy="5.5" rx="2.5" ry="1.8" fill="rgba(255,255,255,0.38)"/>
+        <polygon points="9,17 7.5,14.5 10.5,14.5" fill="rgba(0,0,0,0.52)"/>
+        <line x1="9" y1="16.5" x2="9" y2="27.5" stroke="rgba(0,0,0,0.65)" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>`,
+      iconSize: [18, 28],
+      iconAnchor: [9, 28]
     });
     return L.marker([city.lat, city.lng], { icon });
   }
@@ -185,20 +191,31 @@ const TravelMap = (() => {
   function createStopMarker(stop, color) {
     const bgColor = getStopColor(stop.type, color);
     const icon = L.divIcon({
-      className: '',
-      html: `<div class="stop-marker" style="background:${bgColor}">${stop.num || ''}</div>`,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12]
+      className: 'map-tack',
+      html: `<svg xmlns="http://www.w3.org/2000/svg" width="26" height="36" viewBox="0 0 26 36">
+        <ellipse cx="13.5" cy="11.5" rx="11" ry="8.5" fill="rgba(0,0,0,0.22)"/>
+        <ellipse cx="13" cy="11" rx="11" ry="8.5" fill="${bgColor}" stroke="rgba(255,255,255,0.82)" stroke-width="1.5"/>
+        <text x="13" y="11" text-anchor="middle" dominant-baseline="central" fill="white" font-size="9" font-weight="700" font-family="DM Sans,sans-serif">${stop.num || ''}</text>
+        <polygon points="13,24 11,19.5 15,19.5" fill="rgba(0,0,0,0.52)"/>
+        <line x1="13" y1="23" x2="13" y2="35" stroke="rgba(0,0,0,0.65)" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>`,
+      iconSize: [26, 36],
+      iconAnchor: [13, 36]
     });
     return L.marker([stop.lat, stop.lng], { icon });
   }
 
   function createCityMarker(city, color) {
     const icon = L.divIcon({
-      className: '',
-      html: `<div class="city-marker" style="background:${color}"></div>`,
-      iconSize: [10, 10],
-      iconAnchor: [5, 5]
+      className: 'map-tack',
+      html: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="20" viewBox="0 0 14 20">
+        <ellipse cx="7.5" cy="6.5" rx="5.5" ry="4" fill="rgba(0,0,0,0.22)"/>
+        <ellipse cx="7" cy="6" rx="5.5" ry="4" fill="${color}" stroke="rgba(255,255,255,0.75)" stroke-width="1.2"/>
+        <ellipse cx="5.5" cy="4.5" rx="1.8" ry="1.2" fill="rgba(255,255,255,0.38)"/>
+        <line x1="7" y1="10" x2="7" y2="19" stroke="rgba(0,0,0,0.6)" stroke-width="1.2" stroke-linecap="round"/>
+      </svg>`,
+      iconSize: [14, 20],
+      iconAnchor: [7, 20]
     });
     return L.marker([city.lat, city.lng], { icon });
   }
@@ -251,7 +268,7 @@ const TravelMap = (() => {
 
     cities.forEach(city => {
       const m = createFamilyPinMarker(city, color);
-      m.bindTooltip(city.name, { direction: 'top', offset: [0, -14] });
+      m.bindTooltip(city.name, { direction: 'top', offset: [0, -28] });
       cluster.addLayer(m);
     });
 
