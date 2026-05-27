@@ -2573,6 +2573,330 @@
       ]
     },
     {
+      "key": "carl-2022-backpacking",
+      "name": "2022 Asia Backpacking",
+      "year": "2022",
+      "icon": "🎒",
+      "color": "#29b6f6",
+      "pathColor": "rgba(41, 182, 246, 0.4)",
+      "mode": "linear",
+      "travelers": [
+        "carl"
+      ],
+      "countries": [
+        "Singapore",
+        "Malaysia",
+        "Indonesia",
+        "Vietnam",
+        "Cambodia",
+        "Thailand",
+        "Philippines"
+      ],
+      "stops": [
+        {
+          "num": 1,
+          "name": "Singapore",
+          "lat": 1.3521,
+          "lng": 103.8198,
+          "type": "hub"
+        },
+        {
+          "num": 2,
+          "name": "Kuala Lumpur",
+          "lat": 3.139,
+          "lng": 101.6869,
+          "type": "stop"
+        },
+        {
+          "num": 3,
+          "name": "Cameron Highlands",
+          "lat": 4.4718,
+          "lng": 101.3821,
+          "type": "stop"
+        },
+        {
+          "num": 4,
+          "name": "George Town, Penang",
+          "lat": 5.4141,
+          "lng": 100.3288,
+          "type": "stop",
+          "note": "Penang island"
+        },
+        {
+          "num": 5,
+          "name": "Langkawi",
+          "lat": 6.3504,
+          "lng": 99.7999,
+          "type": "stop"
+        },
+        {
+          "num": 6,
+          "name": "Bali",
+          "lat": -8.3405,
+          "lng": 115.092,
+          "type": "hub"
+        },
+        {
+          "num": 7,
+          "name": "Denpasar",
+          "lat": -8.6705,
+          "lng": 115.2126,
+          "type": "stop"
+        },
+        {
+          "num": 8,
+          "name": "Munduk",
+          "lat": -8.2747,
+          "lng": 115.0847,
+          "type": "stop"
+        },
+        {
+          "num": 9,
+          "name": "Pemuteran",
+          "lat": -8.1197,
+          "lng": 114.6453,
+          "type": "stop"
+        },
+        {
+          "num": 10,
+          "name": "Sanur",
+          "lat": -8.7094,
+          "lng": 115.2587,
+          "type": "stop"
+        },
+        {
+          "num": 11,
+          "name": "Bali",
+          "lat": -8.3405,
+          "lng": 115.092,
+          "type": "hub"
+        },
+        {
+          "num": 12,
+          "name": "Flores",
+          "lat": -8.4967,
+          "lng": 119.8888,
+          "type": "stop",
+          "note": "Labuan Bajo"
+        },
+        {
+          "num": 13,
+          "name": "Komodo",
+          "lat": -8.5433,
+          "lng": 119.4806,
+          "type": "stop"
+        },
+        {
+          "num": 14,
+          "name": "Ho Chi Minh City",
+          "lat": 10.8231,
+          "lng": 106.6297,
+          "type": "hub"
+        },
+        {
+          "num": 15,
+          "name": "Hoi An",
+          "lat": 15.8801,
+          "lng": 108.338,
+          "type": "stop"
+        },
+        {
+          "num": 16,
+          "name": "Hanoi",
+          "lat": 21.0285,
+          "lng": 105.8542,
+          "type": "hub"
+        },
+        {
+          "num": 17,
+          "name": "Ha Giang",
+          "lat": 22.8233,
+          "lng": 104.9836,
+          "type": "stop"
+        },
+        {
+          "num": 18,
+          "name": "Ban Gioc Waterfall",
+          "lat": 22.8562,
+          "lng": 106.7072,
+          "type": "stop",
+          "note": "Cao Bang — Vietnam/China border"
+        },
+        {
+          "num": 19,
+          "name": "Ha Giang",
+          "lat": 22.8233,
+          "lng": 104.9836,
+          "type": "stop"
+        },
+        {
+          "num": 20,
+          "name": "Sapa",
+          "lat": 22.3363,
+          "lng": 103.844,
+          "type": "stop"
+        },
+        {
+          "num": 21,
+          "name": "Hanoi",
+          "lat": 21.0285,
+          "lng": 105.8542,
+          "type": "hub"
+        },
+        {
+          "num": 22,
+          "name": "Phnom Penh",
+          "lat": 11.5564,
+          "lng": 104.9282,
+          "type": "stop"
+        },
+        {
+          "num": 23,
+          "name": "Koh Rong Sanloem",
+          "lat": 10.5834,
+          "lng": 103.2617,
+          "type": "stop"
+        },
+        {
+          "num": 24,
+          "name": "Siem Reap",
+          "lat": 13.3671,
+          "lng": 103.8448,
+          "type": "stop"
+        },
+        {
+          "num": 25,
+          "name": "Bangkok",
+          "lat": 13.7563,
+          "lng": 100.5018,
+          "type": "hub"
+        },
+        {
+          "num": 26,
+          "name": "Krabi",
+          "lat": 8.0863,
+          "lng": 98.9063,
+          "type": "stop"
+        },
+        {
+          "num": 27,
+          "name": "Koh Tao",
+          "lat": 10.0958,
+          "lng": 99.8394,
+          "type": "dive"
+        },
+        {
+          "num": 28,
+          "name": "Surat Thani",
+          "lat": 9.1382,
+          "lng": 99.3211,
+          "type": "transit"
+        },
+        {
+          "num": 29,
+          "name": "Chiang Mai",
+          "lat": 18.7883,
+          "lng": 98.9853,
+          "type": "hub"
+        },
+        {
+          "num": 30,
+          "name": "Pai",
+          "lat": 19.3619,
+          "lng": 98.4418,
+          "type": "stop"
+        },
+        {
+          "num": 31,
+          "name": "Chiang Mai",
+          "lat": 18.7883,
+          "lng": 98.9853,
+          "type": "hub"
+        },
+        {
+          "num": 32,
+          "name": "Bangkok",
+          "lat": 13.7563,
+          "lng": 100.5018,
+          "type": "hub"
+        },
+        {
+          "num": 33,
+          "name": "Manila",
+          "lat": 14.5995,
+          "lng": 120.9842,
+          "type": "hub"
+        },
+        {
+          "num": 34,
+          "name": "Puerto Princesa",
+          "lat": 9.7398,
+          "lng": 118.7348,
+          "type": "stop",
+          "note": "Palawan"
+        },
+        {
+          "num": 35,
+          "name": "El Nido",
+          "lat": 11.1734,
+          "lng": 119.3958,
+          "type": "stop",
+          "note": "Palawan"
+        },
+        {
+          "num": 36,
+          "name": "Coron",
+          "lat": 12.0024,
+          "lng": 120.2037,
+          "type": "stop",
+          "note": "Palawan"
+        },
+        {
+          "num": 37,
+          "name": "Cebu",
+          "lat": 10.3157,
+          "lng": 123.8854,
+          "type": "hub"
+        },
+        {
+          "num": 38,
+          "name": "Tagbilaran",
+          "lat": 9.6441,
+          "lng": 123.8601,
+          "type": "stop",
+          "note": "Bohol"
+        },
+        {
+          "num": 39,
+          "name": "Siquijor",
+          "lat": 9.2085,
+          "lng": 123.5068,
+          "type": "stop"
+        },
+        {
+          "num": 40,
+          "name": "Manila",
+          "lat": 14.5995,
+          "lng": 120.9842,
+          "type": "hub"
+        },
+        {
+          "num": 41,
+          "name": "Bangkok",
+          "lat": 13.7563,
+          "lng": 100.5018,
+          "type": "transit"
+        },
+        {
+          "num": 42,
+          "name": "Manila",
+          "lat": 14.5995,
+          "lng": 120.9842,
+          "type": "hub"
+        }
+      ]
+    },
+    {
       "key": "marianne-1987-europe-backpacking",
       "name": "1987 Europe Backpacking",
       "year": "1987",
