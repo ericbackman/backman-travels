@@ -299,45 +299,117 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // ─── Stats page ───────────────────────────────────────────────────────
   function renderStatsPage(travelers, trips) {
+    // Defined inside the function to avoid TDZ: this const would be in the
+    // temporal dead zone when renderStatsPage() is first called above.
+    const PERSON_ICONS = { eric: '🧭', carl: '🎿', mika: '🧳', marianne: '🌺', todd: '🎒' };
     const container = document.getElementById('stats-container');
     container.replaceChildren();
 
-    const allCountries = new Set();
-    const allCities    = new Set();
-    trips.forEach(trip => {
-      if (trip.countries) trip.countries.forEach(c => allCountries.add(c));
-      if (trip.mode === 'pins')           trip.cities.forEach(c => allCities.add(c.name));
-      else if (trip.stops)                trip.stops.forEach(s => allCities.add(s.name));
-      else if (trip.mode === 'hub-spoke') {
-        trip.spokes.forEach(s => {
-          if (s.chain) s.chain.forEach(c => allCities.add(c.name));
-          else allCities.add(s.name);
-        });
-      }
-    });
-
-    const linearTrips = trips.filter(t => t.mode === 'linear');
-    const totalKm     = linearTrips.reduce((sum, t) => sum + (calcTripDistanceKm(t) || 0), 0);
-    const totalMi     = Math.round(totalKm * 0.621371);
+    // ── Sticky page header with person selector ──────────────────────────
+    const stickyHeader = document.createElement('div');
+    stickyHeader.className = 'stats-sticky-header';
 
     const heading = document.createElement('h2');
     heading.textContent = 'Travel Stats';
-    container.appendChild(heading);
+    stickyHeader.appendChild(heading);
 
+    const selectorRow = document.createElement('div');
+    selectorRow.className = 'person-selector';
+    stickyHeader.appendChild(selectorRow);
+
+    // ── Scrollable content area (re-rendered on person change) ───────────
+    const statsContent = document.createElement('div');
+    statsContent.className = 'stats-content';
+
+    container.append(stickyHeader, statsContent);
+
+    // Only real travelers (not the 'family' meta-group) are selectable
+    const selectable = travelers.filter(t => t.id !== 'family');
+    let activeTraveler = selectable.find(t => t.id === 'eric') || selectable[0];
+
+    function selectPerson(traveler) {
+      activeTraveler = traveler;
+      selectorRow.querySelectorAll('.person-btn').forEach(btn =>
+        btn.classList.toggle('active', btn.dataset.id === traveler.id)
+      );
+      renderPersonStats(statsContent, traveler, trips, travelers);
+    }
+
+    selectable.forEach(traveler => {
+      const btn = document.createElement('button');
+      btn.className = 'person-btn';
+      btn.dataset.id = traveler.id;
+      btn.style.setProperty('--person-color', traveler.color);
+      btn.textContent = `${PERSON_ICONS[traveler.id] || ''} ${traveler.name}`;
+      btn.addEventListener('click', () => selectPerson(traveler));
+      selectorRow.appendChild(btn);
+    });
+
+    // Render Eric's stats on load
+    selectPerson(activeTraveler);
+  }
+
+  // ── Per-person stats renderer ────────────────────────────────────────
+  function renderPersonStats(container, traveler, allTrips, allTravelers) {
+    const personTrips = allTrips.filter(t => t.travelers.includes(traveler.id));
+    const color       = traveler.color;
+
+    const countries    = new Set();
+    const cities       = new Set();
+    const numericYears = [];
+
+    personTrips.forEach(trip => {
+      if (trip.countries) trip.countries.forEach(c => countries.add(c));
+
+      if (trip.mode === 'pins') {
+        trip.cities.forEach(c => cities.add(c.name));
+      } else if (trip.mode === 'hub-spoke') {
+        if (trip.hub) cities.add(trip.hub.name);
+        trip.spokes.forEach(s => {
+          if (s.chain) s.chain.forEach(c => cities.add(c.name));
+          else cities.add(s.name);
+        });
+      } else if (trip.stops) {
+        trip.stops.forEach(s => cities.add(s.name));
+      }
+
+      const y = parseInt(trip.year);
+      if (!isNaN(y)) numericYears.push(y);
+    });
+
+    const linearTrips = personTrips.filter(t => t.mode === 'linear');
+    const totalKm     = linearTrips.reduce((sum, t) => sum + (calcTripDistanceKm(t) || 0), 0);
+    const totalMi     = Math.round(totalKm * 0.621371);
+
+    const yearMin   = numericYears.length ? Math.min(...numericYears) : null;
+    const yearMax   = numericYears.length ? Math.max(...numericYears) : null;
+    const yearRange = yearMin ? (yearMin === yearMax ? `${yearMin}` : `${yearMin}–${yearMax}`) : '—';
+
+    container.replaceChildren();
+
+    // ── Overview stat cards ──────────────────────────────────────────────
     const grid = document.createElement('div');
     grid.className = 'stat-grid';
 
-    [
-      { value: trips.length,                        label: 'Total Trips' },
-      { value: allCountries.size,                   label: 'Countries Visited' },
-      { value: allCities.size,                      label: 'Cities Visited' },
-      { value: travelers.length,                    label: 'Travelers' },
-      { value: Math.round(totalKm).toLocaleString(), label: `km on route trips (${totalMi.toLocaleString()} mi)` }
-    ].forEach(({ value, label }) => {
+    const statData = [
+      { value: personTrips.length, label: 'Trips' },
+      { value: countries.size,     label: 'Countries' },
+      { value: cities.size,        label: 'Cities' },
+      { value: yearRange,          label: 'Years Active' },
+    ];
+    if (totalKm > 0) {
+      statData.push({
+        value: Math.round(totalKm).toLocaleString(),
+        label: `km routed (${totalMi.toLocaleString()} mi)`
+      });
+    }
+
+    statData.forEach(({ value, label }) => {
       const card = document.createElement('div');
       card.className = 'stat-card';
       const v = document.createElement('div');
       v.className = 'stat-card-value';
+      v.style.color = color;
       v.textContent = value;
       const l = document.createElement('div');
       l.className = 'stat-card-label';
@@ -347,76 +419,68 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
     container.appendChild(grid);
 
-    const perPersonHeading = document.createElement('h3');
-    perPersonHeading.textContent = 'Trips per person';
-    perPersonHeading.style.marginBottom = '12px';
-    container.appendChild(perPersonHeading);
+    // ── Countries visited chips ──────────────────────────────────────────
+    if (countries.size) {
+      const cHeading = document.createElement('h3');
+      cHeading.className = 'stats-section-heading';
+      cHeading.textContent = 'Countries Visited';
+      container.appendChild(cHeading);
 
-    travelers.forEach(t => {
-      const count = trips.filter(trip => trip.travelers.includes(t.id)).length;
-      const row = document.createElement('div');
-      row.style.cssText = 'margin-bottom:8px;display:flex;align-items:center;gap:12px';
+      const chipsRow = document.createElement('div');
+      chipsRow.className = 'country-chips';
+      [...countries].sort().forEach(c => {
+        const chip = document.createElement('span');
+        chip.className = 'country-chip';
+        chip.textContent = c;
+        chipsRow.appendChild(chip);
+      });
+      container.appendChild(chipsRow);
+    }
 
-      const nameEl = document.createElement('span');
-      nameEl.style.cssText = 'width:80px;font-size:0.85rem';
-      nameEl.textContent = t.name;
+    // ── Trip history ─────────────────────────────────────────────────────
+    const tHeading = document.createElement('h3');
+    tHeading.className = 'stats-section-heading';
+    tHeading.textContent = `Trip History (${personTrips.length})`;
+    container.appendChild(tHeading);
 
-      const barBg = document.createElement('div');
-      barBg.style.cssText = 'flex:1;height:20px;background:var(--bg-secondary);border-radius:10px;overflow:hidden';
-      const barFill = document.createElement('div');
-      barFill.style.cssText = `height:100%;width:${(count / trips.length) * 100}%;background:${t.color || 'var(--accent)'};border-radius:10px;transition:0.3s`;
-      barBg.appendChild(barFill);
-
-      const countEl = document.createElement('span');
-      countEl.style.cssText = 'font-size:0.82rem;color:var(--text-muted)';
-      countEl.textContent = count;
-
-      row.append(nameEl, barBg, countEl);
-      container.appendChild(row);
+    const sortedTrips = [...personTrips].sort((a, b) => {
+      const ay = parseInt(a.year) || 0;
+      const by = parseInt(b.year) || 0;
+      return by - ay;
     });
 
-    // ── Distance per person ──────────────────────────────────────────────────
-    const travelerKms = travelers
-      .filter(t => t.id !== 'family')
-      .map(t => ({
-        ...t,
-        km: linearTrips
-              .filter(trip => trip.travelers.includes(t.id))
-              .reduce((sum, trip) => sum + (calcTripDistanceKm(trip) || 0), 0)
-      }))
-      .filter(t => t.km > 0)
-      .sort((a, b) => b.km - a.km);
+    sortedTrips.forEach(trip => {
+      const stops = trip.mode === 'pins'
+        ? trip.cities.map(c => c.name)
+        : trip.mode === 'hub-spoke'
+          ? [trip.hub.name, ...trip.spokes.map(s =>
+              s.chain ? s.chain.map(c => c.name).join(' → ') : s.name)]
+          : (trip.stops || []).map(s => s.name);
 
-    if (travelerKms.length) {
-      const maxKm = travelerKms[0].km;
+      const distKm = calcTripDistanceKm(trip);
 
-      const distHeading = document.createElement('h3');
-      distHeading.textContent = 'Distance per person (route trips only)';
-      distHeading.style.cssText = 'margin-top:32px;margin-bottom:12px';
-      container.appendChild(distHeading);
+      const row = document.createElement('div');
+      row.className = 'stats-trip-row';
 
-      travelerKms.forEach(t => {
-        const mi  = Math.round(t.km * 0.621371);
-        const row = document.createElement('div');
-        row.style.cssText = 'margin-bottom:8px;display:flex;align-items:center;gap:12px';
+      const iconEl = document.createElement('span');
+      iconEl.className = 'stats-trip-icon';
+      iconEl.textContent = trip.icon;
 
-        const nameEl = document.createElement('span');
-        nameEl.style.cssText = 'width:80px;font-size:0.85rem';
-        nameEl.textContent = t.name;
+      const info = document.createElement('div');
+      info.className = 'stats-trip-info';
 
-        const barBg = document.createElement('div');
-        barBg.style.cssText = 'flex:1;height:20px;background:var(--bg-secondary);border-radius:10px;overflow:hidden';
-        const barFill = document.createElement('div');
-        barFill.style.cssText = `height:100%;width:${(t.km / maxKm) * 100}%;background:${t.color || 'var(--accent)'};border-radius:10px;transition:0.3s`;
-        barBg.appendChild(barFill);
+      const name = document.createElement('div');
+      name.className = 'stats-trip-name';
+      name.textContent = trip.name;
 
-        const labelEl = document.createElement('span');
-        labelEl.style.cssText = 'font-size:0.82rem;color:var(--text-muted);white-space:nowrap;min-width:130px;text-align:right';
-        labelEl.textContent = `${t.km.toLocaleString()} km / ${mi.toLocaleString()} mi`;
+      const meta = document.createElement('div');
+      meta.className = 'stats-trip-meta';
+      meta.textContent = `${trip.year} · ${stops.length} stop${stops.length !== 1 ? 's' : ''}` +
+        (distKm ? ` · ${distKm.toLocaleString()} km` : '');
 
-        row.append(nameEl, barBg, labelEl);
-        container.appendChild(row);
-      });
-    }
+      info.append(name, meta);
+      row.append(iconEl, info);
+      container.appendChild(row);
+    });
   }
 });

@@ -447,6 +447,118 @@ main {
   height: 100%;
 }
 
+/* Sticky header: h2 + person selector */
+.stats-sticky-header {
+  position: sticky;
+  top: -24px;          /* cancels the container's 24px top padding */
+  background: var(--bg-primary);
+  margin: -24px -24px 0;
+  padding: 24px 24px 16px;
+  border-bottom: 1px solid var(--border);
+  z-index: 5;
+}
+
+.stats-sticky-header h2 {
+  margin-bottom: 14px;
+  font-size: 1.1rem;
+}
+
+/* Person selector — pill-style buttons */
+.person-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.person-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text);
+  cursor: pointer;
+  font-family: inherit;
+  transition: var(--transition);
+}
+
+.person-btn:hover {
+  background: var(--bg-hover);
+}
+
+.person-btn.active {
+  background: var(--person-color);
+  border-color: var(--person-color);
+  color: #000;
+  font-weight: 600;
+}
+
+/* Stats content — scrollable body below the sticky header */
+.stats-content {
+  padding-top: 24px;
+}
+
+/* Country chips */
+.country-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.country-chip {
+  font-size: 0.78rem;
+  padding: 4px 10px;
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  color: var(--text-muted);
+}
+
+/* Section heading in per-person stats */
+.stats-section-heading {
+  margin-top: 28px;
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* Trip history rows */
+.stats-trip-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 8px;
+}
+
+.stats-trip-icon {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+.stats-trip-info {
+  min-width: 0;
+}
+
+.stats-trip-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stats-trip-meta {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
 .stat-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
